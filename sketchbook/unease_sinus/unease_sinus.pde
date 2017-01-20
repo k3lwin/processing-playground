@@ -1,6 +1,6 @@
 int radius = 200;
-int precision = 800;
-int points_per_circle = 500;
+int precision = 100;
+int points_per_circle = 1000;
 float speed = 0.1;
 float ease_factor_red = 0.1;
 float ease_factor_green = 0.01;
@@ -35,6 +35,9 @@ void setup(){
 
 void draw(){
   background(40);
+  
+//  for (int i = 50; i < 400; i += 50){
+//    radius = i;
   set_color("red");
   arc_calculate();
   calculate();
@@ -47,6 +50,7 @@ void draw(){
   arc_calculate();
   calculate();
   plot();
+//  }
 }
 
 void arc_calculate(){
@@ -71,8 +75,8 @@ void arc_calculate(){
 
 void calculate(){
   arc_length = end - start;
-  for (int i = 0; i < arc_length; i++){
-    t = ((float)TWO_PI/points_per_circle)*i;
+  for (int i = 0; i < precision; i++){
+    t = ((float)TWO_PI*arc_length/(precision*points_per_circle))*i;
     x[i] = width/2+(radius+sin(freq*t+speed*frameCount)*amp)*(sin(t+TWO_PI*(float)start/points_per_circle));
     y[i] = height/2+(radius+sin(freq*t+speed*frameCount)*amp)*(cos(t+TWO_PI*(float)start/points_per_circle));
   }
@@ -99,10 +103,10 @@ void set_color(String colour){
 }
  
 void plot(){
-  freq = 12/abs((float)(end-start)/precision+0.5);
-  amp = 50/abs((float)10*(end-start)/precision+0.5);
+  freq = 120/abs((float)(end-start)/precision+0.5);
+  amp = 500/abs((float)10*(end-start)/precision+5);
   
-  for (int i = 1; i < arc_length; i++){
+  for (int i = 1; i < precision; i++){
     line(x[i-1], y[i-1], x[i], y[i]);
  }
 
