@@ -1,7 +1,8 @@
 int radius = 200;
-int precision = 500;
+int precision = 800;
+int points_per_circle = 500;
 float speed = 0.1;
-float ease_factor_red = 0.05;
+float ease_factor_red = 0.1;
 float ease_factor_green = 0.01;
 float ease_factor_blue = 0.005;
 
@@ -24,7 +25,7 @@ int arc_length;
 void setup(){
   colorMode(RGB);
   background(40);
-  strokeWeight(5);
+  strokeWeight(8);
   blendMode(ADD);
   size(1024, 768);
   smooth(8);
@@ -34,15 +35,23 @@ void setup(){
 
 void draw(){
   background(40);
+  set_color("red");
   arc_calculate();
   calculate();
-  set_color("red");
+  plot();
+  set_color("green");
+  arc_calculate();
+  calculate();
+  plot();
+  set_color("blue");
+  arc_calculate();
+  calculate();
   plot();
 }
 
 void arc_calculate(){
-  hard_start = int(precision*((float)mouseX/width));
-  hard_end = int(precision*((float)mouseY/height));
+  hard_start = int(points_per_circle*((float)mouseX/width));
+  hard_end = int(points_per_circle*((float)mouseY/height));
   
   if (hard_start > hard_end){
     int tmp = hard_start;
@@ -61,11 +70,11 @@ void arc_calculate(){
 }
 
 void calculate(){
-  arc_length = start - end;
+  arc_length = end - start;
   for (int i = 0; i < arc_length; i++){
-    t = (TWO_PI/arc_length)*i;
-    x[i] = width/2+(radius+sin(freq*t+speed*frameCount)*amp)*(sin(t+TWO_PI*start/precision));
-    y[i] = height/2+(radius+sin(freq*t+speed*frameCount)*amp)*(cos(t+TWO_PI*start/precision));
+    t = ((float)TWO_PI/points_per_circle)*i;
+    x[i] = width/2+(radius+sin(freq*t+speed*frameCount)*amp)*(sin(t+TWO_PI*(float)start/points_per_circle));
+    y[i] = height/2+(radius+sin(freq*t+speed*frameCount)*amp)*(cos(t+TWO_PI*(float)start/points_per_circle));
   }
 }
 
@@ -90,10 +99,10 @@ void set_color(String colour){
 }
  
 void plot(){
-  freq = 12/abs((float)(end-start)/precision);
+  freq = 12/abs((float)(end-start)/precision+0.5);
   amp = 50/abs((float)10*(end-start)/precision+0.5);
   
-  for (int i = 0; i < arc_length; i++){
+  for (int i = 1; i < arc_length; i++){
     line(x[i-1], y[i-1], x[i], y[i]);
  }
 
