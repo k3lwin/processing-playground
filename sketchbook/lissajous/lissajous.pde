@@ -1,7 +1,7 @@
-float fluorescence = 50;
-int coil_voltage = 200;
-int precision = 10;
-float speed_factor = 1;
+float fluorescence = 10;
+int coil_voltage = 300;
+int precision = 100;
+float speed_factor = 10;
 
 float[] x = new float[precision];
 float[] y = new float[precision];
@@ -16,8 +16,8 @@ void setup(){
   size(1024, 768);
   smooth(8);
   
-  x[9] = width/2;
-  y[9] = height/2;
+  x[precision-1] = width/2;
+  y[precision-1] = height/2;
   
 }
 
@@ -28,18 +28,17 @@ void draw(){
   
   stroke(0, 255, 0, 255);
   
-  old_x = x[9];
-  old_y = y[9];
+  old_x = x[precision-1];
+  old_y = y[precision-1];
   
   float t = (frameCount*speed_factor);
   println(t);
   for (int i = 0; i < precision; i++){
     
     float step = (float)i*speed_factor/precision;
-    println(t, step, t+step);
     
-    x[i] = width/2+coil_voltage*sin((float)(mouseX/width)*(t+step));
-    y[i] = height/2+coil_voltage*sin((float)(mouseY/height)*(t+step));
+    x[i] = width/2+coil_voltage*sin((float)mouseX/width*(t+step));
+    y[i] = height/2+coil_voltage*sin((float)mouseY/height*(t+step));
     
     println(i, x[i], y[i]);
   }
