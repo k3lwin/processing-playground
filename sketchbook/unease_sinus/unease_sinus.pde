@@ -26,6 +26,7 @@ void setup(){
   colorMode(RGB);
   background(40);
   strokeWeight(8);
+  strokeJoin(ROUND);
   blendMode(ADD);
   size(1024, 768);
   smooth(8);
@@ -36,8 +37,8 @@ void setup(){
 void draw(){
   background(40);
   
-//  for (int i = 50; i < 400; i += 50){
-//    radius = i;
+  for (int i = 50; i < 400; i += 50){
+    radius = i;
   set_color("red");
   arc_calculate();
   calculate();
@@ -50,7 +51,7 @@ void draw(){
   arc_calculate();
   calculate();
   plot();
-//  }
+  }
 }
 
 void arc_calculate(){
