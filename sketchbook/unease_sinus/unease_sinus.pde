@@ -3,8 +3,8 @@ int precision = 100;
 int points_per_circle = 1000;
 float speed = 0.1;
 float ease_factor_red = 0.1;
-float ease_factor_green = 0.01;
-float ease_factor_blue = 0.005;
+float ease_factor_green = 0.05;
+float ease_factor_blue = 0.001;
 
 float t;
 float[] x;
@@ -37,8 +37,8 @@ void setup(){
 void draw(){
   background(40);
   
-  for (int i = 50; i < 400; i += 50){
-    radius = i;
+//  for (int i = 50; i < 400; i += 50){
+//    radius = i;
   set_color("red");
   arc_calculate();
   calculate();
@@ -51,7 +51,7 @@ void draw(){
   arc_calculate();
   calculate();
   plot();
-  }
+//  }
 }
 
 void arc_calculate(){
