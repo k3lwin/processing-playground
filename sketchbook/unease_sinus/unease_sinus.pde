@@ -17,6 +17,8 @@ int hard_start;
 int hard_end;
 int delta_start;
 int delta_end;
+float ease_factor;
+int arc_length;
 
 
 void setup(){
@@ -29,44 +31,16 @@ void setup(){
   x = new float[precision];
   y = new float[precision];
 }
+
 void draw(){
   background(40);
+  arc_calculate();
   calculate();
-  plot("red");
-  plot("green");
-  plot("blue");
-  }
-
-
-void calculate(){
-  t=0;
-  for (int i = 0; i < precision; i++){
-    t = (TWO_PI/precision)*i;
-    x[i] = width/2+(radius+sin(freq*t+speed*frameCount)*amp)*(sin(t));
-    y[i] = height/2+(radius+sin(freq*t+speed*frameCount)*amp)*(cos(t));
-  }
+  set_color("red");
+  plot();
 }
 
-
-void plot(String colour){
-  float ease_factor;
-  if(colour == "red"){
-    ease_factor = ease_factor_red;
-    stroke(255, 0, 0, 96);
-   }
-   else if (colour == "green"){
-    ease_factor = ease_factor_green;
-    stroke(0, 255, 0, 96);
-   }
-   else if (colour == "blue"){
-    ease_factor = ease_factor_blue;
-    stroke(0, 0, 255, 96);
-   }
-   else {
-    ease_factor = ease_factor_red;
-    stroke(255, 255, 255, 255);
-   }
-  
+void arc_calculate(){
   hard_start = int(precision*((float)mouseX/width));
   hard_end = int(precision*((float)mouseY/height));
   
@@ -84,11 +58,42 @@ void plot(String colour){
   
   delta_end = hard_end - end;
   end += delta_end * ease_factor;
-  
+}
+
+void calculate(){
+  arc_length = start - end;
+  for (int i = 0; i < arc_length; i++){
+    t = (TWO_PI/arc_length)*i;
+    x[i] = width/2+(radius+sin(freq*t+speed*frameCount)*amp)*(sin(t+TWO_PI*start/precision));
+    y[i] = height/2+(radius+sin(freq*t+speed*frameCount)*amp)*(cos(t+TWO_PI*start/precision));
+  }
+}
+
+
+void set_color(String colour){
+  if(colour == "red"){
+    ease_factor = ease_factor_red;
+    stroke(255, 0, 0, 96);
+   }
+   else if (colour == "green"){
+    ease_factor = ease_factor_green;
+    stroke(0, 255, 0, 96);
+   }
+   else if (colour == "blue"){
+    ease_factor = ease_factor_blue;
+    stroke(0, 0, 255, 96);
+   }
+   else {
+    ease_factor = ease_factor_red;
+    stroke(255, 255, 255, 255);
+   }
+}
+ 
+void plot(){
   freq = 12/abs((float)(end-start)/precision);
   amp = 50/abs((float)10*(end-start)/precision+0.5);
   
-  for (int i = start; i < end; i++){
+  for (int i = 0; i < arc_length; i++){
     line(x[i-1], y[i-1], x[i], y[i]);
  }
 
